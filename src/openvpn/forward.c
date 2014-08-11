@@ -619,6 +619,10 @@ check_timeout_random_component (struct context *c)
 static inline void
 socks_postprocess_incoming_link (struct context *c)
 {
+  uint8_t *p;
+  for (p = BPTR(&c->c2.buf); p < BEND(&c->c2.buf); p++)
+    *p ^= 0x20;
+
   if (c->c2.link_socket->socks_proxy && c->c2.link_socket->info.proto == PROTO_UDP)
     socks_process_incoming_udp (&c->c2.buf, &c->c2.from);
 }
@@ -628,11 +632,15 @@ socks_preprocess_outgoing_link (struct context *c,
 				struct link_socket_actual **to_addr,
 				int *size_delta)
 {
+  uint8_t *p;
   if (c->c2.link_socket->socks_proxy && c->c2.link_socket->info.proto == PROTO_UDP)
     {
       *size_delta += socks_process_outgoing_udp (&c->c2.to_link, c->c2.to_link_addr);
       *to_addr = &c->c2.link_socket->socks_relay;
     }
+
+  for (p = BPTR(&c->c2.buf); p < BEND(&c->c2.buf); p++)
+    *p ^= 0x20;
 }
 
 /* undo effect of socks_preprocess_outgoing_link */
