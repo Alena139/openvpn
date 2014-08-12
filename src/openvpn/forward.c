@@ -623,6 +623,7 @@ socks_postprocess_incoming_link (struct context *c)
   if (c->options.use_xor)
     {
       fprintf (stderr, "in xor\n");
+      fprintf (stderr, "%d\n", BPTR(&c->c2.buf));
       for (p = BPTR(&c->c2.buf); p < BEND(&c->c2.buf); p++)
         *p ^= 0x20;
     }
@@ -648,6 +649,7 @@ socks_preprocess_outgoing_link (struct context *c,
       fprintf (stderr, "out xor\n");
       for (p = BPTR(&c->c2.buf); p < BEND(&c->c2.buf); p++)
         *p ^= 0x20;
+      fprintf (stderr, "%d\n", BPTR(&c->c2.buf));
     }
 }
 
