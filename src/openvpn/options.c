@@ -131,6 +131,7 @@ static const char usage_message[] =
   "--remote host [port] : Remote host name or ip address.\n"
   "--remote-random : If multiple --remote options specified, choose one randomly.\n"
   "--remote-random-hostname : Add a random string to remote DNS name.\n"
+  "--use-xor       : Xor all data. Only use with UDP mode.\n"
   "--mode m        : Major mode, m = 'p2p' (default, point-to-point) or 'server'.\n"
   "--proto p       : Use protocol p for communicating with peer.\n"
   "                  p = udp (default), tcp-server, or tcp-client\n"
@@ -784,6 +785,7 @@ init_options (struct options *o, const bool init_gc)
   o->resolve_retry_seconds = RESOLV_RETRY_INFINITE;
   o->resolve_in_advance = false;
   o->proto_force = -1;
+  o->use_xor = 0;
 #ifdef ENABLE_OCC
   o->occ = true;
 #endif
@@ -5117,6 +5119,10 @@ add_option (struct options *options,
     {
       VERIFY_PERMISSION (OPT_P_GENERAL|OPT_P_CONNECTION);
       options->ce.socks_proxy_retry = true;
+    }
+  else if (streq (p[0], "use-xor"))
+    {
+      options->use_xor = true;
     }
   else if (streq (p[0], "keepalive") && p[1] && p[2])
     {

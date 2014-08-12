@@ -620,8 +620,11 @@ static inline void
 socks_postprocess_incoming_link (struct context *c)
 {
   uint8_t *p;
-  for (p = BPTR(&c->c2.buf); p < BEND(&c->c2.buf); p++)
-    *p ^= 0x20;
+  if (c->options.use_xor)
+    {
+      for (p = BPTR(&c->c2.buf); p < BEND(&c->c2.buf); p++)
+        *p ^= 0x20;
+    }
 
   if (c->c2.link_socket->socks_proxy && c->c2.link_socket->info.proto == PROTO_UDP)
     socks_process_incoming_udp (&c->c2.buf, &c->c2.from);
@@ -639,8 +642,11 @@ socks_preprocess_outgoing_link (struct context *c,
       *to_addr = &c->c2.link_socket->socks_relay;
     }
 
-  for (p = BPTR(&c->c2.buf); p < BEND(&c->c2.buf); p++)
-    *p ^= 0x20;
+  if (c->options.use_xor)
+    {
+      for (p = BPTR(&c->c2.buf); p < BEND(&c->c2.buf); p++)
+        *p ^= 0x20;
+    }
 }
 
 /* undo effect of socks_preprocess_outgoing_link */

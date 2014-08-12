@@ -181,6 +181,8 @@ struct options
 # define MODE_SERVER         1
   int mode;
 
+  bool use_xor;
+
   /* enable forward compatibility for post-2.1 features */
   bool forward_compatible;
   /* list of options that should be ignored even if unkown */
