@@ -622,12 +622,8 @@ socks_postprocess_incoming_link (struct context *c)
   uint8_t *p;
   if (c->options.use_xor)
     {
-      fprintf (stderr, "begin in xor\n");
-      fprintf (stderr, "%d\n", BPTR(&c->c2.buf));
       for (p = BPTR(&c->c2.buf); p < BEND(&c->c2.buf); p++)
         *p ^= 0x20;
-      fprintf (stderr, "%d\n", BPTR(&c->c2.buf));
-      fprintf (stderr, "end in xor\n");
     }
 
   if (c->c2.link_socket->socks_proxy && c->c2.link_socket->info.proto == PROTO_UDP)
@@ -648,12 +644,8 @@ socks_preprocess_outgoing_link (struct context *c,
 
   if (c->options.use_xor)
     {
-      fprintf (stderr, "begin out xor\n");
-      fprintf (stderr, "%d\n", BPTR(&c->c2.to_link));
       for (p = BPTR(&c->c2.to_link); p < BEND(&c->c2.to_link); p++)
         *p ^= 0x20;
-      fprintf (stderr, "%d\n", BPTR(&c->c2.to_link));
-      fprintf (stderr, "end out xor\n");
     }
 }
 
